@@ -16,6 +16,8 @@ export async function POST(req) {
       name: String(body?.name ?? "").trim(),
       age: String(body?.age ?? "").trim(),
       email: String(body?.email ?? "").trim(),
+      ts: String("").trim(),
+      tl: String("").trim(),
     };
 
     if (!row.name || !row.age || !row.email) {
@@ -40,11 +42,13 @@ export async function POST(req) {
       name: String(item?.name ?? "").trim(),
       age: String(item?.age ?? "").trim(),
       email: String(item?.email ?? "").trim(),
+      ts: String("").trim(),
+      tl: String("").trim(),
     }));
     normalizedData.push(row);
 
     const newSheet = XLSX.utils.json_to_sheet(normalizedData, {
-      header: ["name", "age", "email"],
+      header: ["name", "age", "mak"],
     });
     workbook.SheetNames = [];
     workbook.Sheets = {};
