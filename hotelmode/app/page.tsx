@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true);
   const [popup, setPopup] = useState<{
     type: "success" | "error";
     message: string;
@@ -28,7 +28,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!popup) return;
-    const timer = setTimeout(() => setPopup(null), 3000);
+    const timer = setTimeout(() => setPopup(null), 9000);
     return () => clearTimeout(timer);
   }, [popup]);
 
@@ -221,14 +221,22 @@ export default function Home() {
                 }`}
               >
                 <option value="beer">Beer</option>
-                <option value="room">Room</option>
+                <option value="room-standard">Room big</option>
+                <option value="Double bed">Double bed</option>
+                <option value="room-deluxe">Room small</option>
+                <option value="AWASH WINE BIG">AWASH WINE BIG</option>
+                <option value="Guder wine small">Guder wine small</option>
                 <option value="tegabino">Tegabino</option>
+
                 <option value="Areqe double">Areqe double</option>
                 <option value="draft single">draft single</option>
                 <option value="Tibs">Tibs</option>
+                <option value="Dabo">Dabo</option>
                 <option value="yesom ferfer">yesom ferfer</option>
-                <option value="water one liter">water one liter</option>
+                <option value="water one liter">Water one liter</option>
+                <option value="water half">Water half</option>
                 <option value="Soft drink ">Soft drink</option>
+                <option value="Sofi">Sofi</option>
                 <option value="Bedele Spe">Bedele Spe</option>
                 <option value="Habesha areke">Habesha areke</option>
                 <option value="dulet">dulet</option>
@@ -238,10 +246,14 @@ export default function Home() {
                 <option value="Ambo wuha">Ambo wuha</option>
                 <option value="beyaynet">beyaynet</option>
                 <option value="Draft jambo">Draft jambo</option>
-                <option value="yejebena buna">yejebena buna</option>
+                <option value="Yejebena buna">Yejebena buna</option>
+                <option value="tea">Tea</option>
                 <option value="water two liter">water two liter</option>
                 <option value="Gomen">Gomen</option>
                 <option value="afagn">afagn</option>
+                <option value="Shero feses">shero feses</option>
+                <option value="Tomato Salad">tomato salad</option>
+                <option value="Pasta besigo">pasta besigo</option>
               </select>
             </label>
 
