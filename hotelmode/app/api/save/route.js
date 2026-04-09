@@ -25,7 +25,7 @@ const products = [
 { value: "water one liter", label: "water one liter", price: 39.13 },
 { value: "water half", label: "water half", price: 30.43 },
 { value: "Soft drink", label: "Soft drink", price: 52.17 },
-{ value: "Sofi", label: "Soft drink", price: 82.60 },
+{ value: "Sofi", label: "Soft drink", price: 86.95 },
 { value: "Bedele Spe", label: "Bedele Spe", price: 95.65 },
 { value: "Habesha areke", label: "Habesha areke", price: 30.43 },
 { value: "dulet", label: "dulet", price: 20 },
