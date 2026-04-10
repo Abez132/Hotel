@@ -74,7 +74,6 @@ export default function Home() {
       } else {
         setPopup({ type: "success", message: "Saved!" });
       }
-      form.reset();
     } catch {
       setPopup({ type: "error", message: "Network error while saving data." });
     }
@@ -225,9 +224,9 @@ export default function Home() {
                 <option value="Double bed">Double bed</option>
                 <option value="room-deluxe">Room small</option>
                 <option value="AWASH WINE BIG">AWASH WINE BIG</option>
+                <option value="Kamila win big">Kamila win big</option>
                 <option value="Guder wine small">Guder wine small</option>
                 <option value="tegabino">Tegabino</option>
-
                 <option value="Areqe double">Areqe double</option>
                 <option value="draft single">draft single</option>
                 <option value="Tibs">Tibs</option>
