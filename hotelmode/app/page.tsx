@@ -74,6 +74,12 @@ export default function Home() {
       } else {
         setPopup({ type: "success", message: "Saved!" });
       }
+      const fsValue = formData.fs;
+      form.reset();
+      const fsField = form.elements.namedItem("fs");
+      if (fsField instanceof HTMLInputElement) {
+        fsField.value = fsValue;
+      }
     } catch {
       setPopup({ type: "error", message: "Network error while saving data." });
     }
