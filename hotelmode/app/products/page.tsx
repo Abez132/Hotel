@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 type Product = {
   value: string;
@@ -117,6 +118,12 @@ export default function ProductsPage() {
 
   return (
     <main className="min-h-screen px-4 py-8 sm:px-8 sm:py-12">
+      <Link
+                href="/"
+                className="mt-6 inline-flex h-11 items-center justify-center rounded-xl bg-[#0f1231] px-4 text-sm font-semibold text-white transition hover:bg-[#302724] "
+              >
+                back
+              </Link>
       <section className="mx-auto w-full max-w-5xl rounded-3xl border border-white/40 bg-white/85 p-6 shadow-[0_20px_60px_rgba(10,36,64,0.18)] backdrop-blur md:p-10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
