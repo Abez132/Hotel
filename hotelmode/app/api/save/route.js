@@ -9,51 +9,47 @@ if (typeof XLSX.set_fs === "function") {
   XLSX.set_fs(fs);
 }
 
-const products = [
-{ value: "Beer", label: "Beer", price: 86.95 },
-{ value: "room-standard", label: "Room Standard", excelName: "Room", price: 695.65 },
-{ value: "room-deluxe", label: "Room Deluxe", excelName: "Room", price: 347.82 },
-{ value: "Double bed", label: "Double bed", excelName: "Double bed", price: 1043.47 },
-{ value: "AWASH WINE BIG", label: "Awash wine", price: 434.78 },
-{ value: "Kamila win big", label: "Kamila win big", price: 608.69 },
-{ value: "Guder wine small", label: "Guder", price: 217.39 },
-{ value: "Tegabino", label: "Tegabino", price: 147.82  },
-{ value: "Areqe double", label: "Areqe double", price: 69.56 },
-{ value: "Draft Single", label: "Draft Single", price: 47.82 },
-{ value: "Tibs", label: "Tibs", price: 20 },
-{ value: "Dabo", label: "Dabo", price: 13.04 },
-{ value: "yesom ferfer", label: "yesom ferfer", price: 130.43 },
-{ value: "water one liter", label: "water one liter", price: 39.13 },
-{ value: "water half", label: "water half", price: 30.43 },
-{ value: "Soft drink", label: "Soft drink", price: 52.17 },
-{ value: "Sofi", label: "Soft drink", price: 86.95 },
-{ value: "Bedele Spe", label: "Bedele Spe", price: 95.65 },
-{ value: "Habesha areke", label: "Habesha areke", price: 30.43 },
-{ value: "dulet", label: "dulet", price: 20 },
-{ value: "negus", label: "negus", price: 86.95 },
-{ value: "heinken", label: "heinken", price: 95.65 },
-{ value: "Arada", label: "Arada", price: 95.65 },
-{ value: "Ambo wuha", label: "Ambo wuha", price: 52.17 },
-{ value: "beyaynet", label: "beyaynet", price: 130.43 },
-{ value: "Tea", label: "Tea", price: 21.73 },
-{ value: "Draft jambo", label: "Draft jambo", price: 95.65 },
-{ value: "yejebena buna", label: "yejebena buna", price: 26.08 },
-{ value: "Water Two Liter", label: "water two liter", price: 52.17 },
-{ value: "Gomen", label: "Gomen", price: 130.43 },
-{ value: "afagn", label: "afagn", price: 20 },
-{ value: "Shero feses", label: "Shero feses", price: 130.43 },
-{ value: "Tomato salad", label: "Tomato Salad", price: 130.43 },
-{ value: "Pasta besigo", label: "pasta besigo", price: 130.43 }
-];
+const productsFilePath = path.join(process.cwd(), "data", "products.json");
+
+function ensureProductsFile() {
+  const directory = path.dirname(productsFilePath);
+  if (!fs.existsSync(directory)) {
+    fs.mkdirSync(directory, { recursive: true });
+  }
+
+  if (!fs.existsSync(productsFilePath)) {
+    fs.writeFileSync(productsFilePath, "[]", "utf8");
+  }
+}
+
+function readProducts() {
+  ensureProductsFile();
+  const raw = fs.readFileSync(productsFilePath, "utf8");
+  const parsed = JSON.parse(raw);
+  return Array.isArray(parsed) ? parsed : [];
+}
+
+function normalizeText(value) {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 function creatingRow(body){
 
   var pricing;
   var sum;
-  const goodsValue = String(body?.goods ?? "").trim().toLowerCase();
-  const selected = products.find((p) => p.value.toLowerCase() === goodsValue);
+  const goodsValue = normalizeText(body?.goods);
+  const products = readProducts();
+  const selected = products.find((product) => {
+    const candidateValue = normalizeText(product?.value);
+    const candidateLabel = normalizeText(product?.label);
+    return candidateValue === goodsValue || candidateLabel === goodsValue;
+  });
   if(selected){
-    pricing=selected.price;
+    pricing=Number(selected.price);
 
     sum=pricing*Number(body?.amount ?? 0);
   }else{
@@ -64,7 +60,7 @@ function creatingRow(body){
     console.log(pricing);
   return {
       fs: String(body?.fs ?? "").trim(),
-        goods: selected.excelName ?? String(body?.goods ?? "").trim(),
+        goods: selected.excelName ?? selected.label ?? String(body?.goods ?? "").trim(),
       amount: String(body?.amount ?? "").trim(),
       price:pricing,
       sums:sum,

@@ -1,0 +1,175 @@
+[
+  {
+    "value": "afagn",
+    "label": "Afagn",
+    "price": 20
+  },
+  {
+    "value": "ambo-wuha",
+    "label": "Ambo wuha",
+    "price": 52.17
+  },
+  {
+    "value": "arada",
+    "label": "Arada",
+    "price": 95.65
+  },
+  {
+    "value": "areqe-double",
+    "label": "Areqe double",
+    "price": 69.56
+  },
+  {
+    "value": "awash-wine-big",
+    "label": "Awash wine",
+    "price": 434.78
+  },
+  {
+    "value": "bedele-spe",
+    "label": "Bedele Spe",
+    "price": 95.65
+  },
+  {
+    "value": "beer",
+    "label": "Beer",
+    "price": 86.95
+  },
+  {
+    "value": "beyaynet",
+    "label": "Beyaynet",
+    "price": 130.43
+  },
+  {
+    "value": "dabo",
+    "label": "Dabo",
+    "price": 13.04
+  },
+  {
+    "value": "double-bed",
+    "label": "Double bed",
+    "excelName": "Double bed",
+    "price": 1043.47
+  },
+  {
+    "value": "draft-jambo",
+    "label": "Draft jambo",
+    "price": 95.65
+  },
+  {
+    "value": "draft-single",
+    "label": "Draft Single",
+    "price": 47.82
+  },
+  {
+    "value": "dulet",
+    "label": "Dulet",
+    "price": 20
+  },
+  {
+    "value": "gomen",
+    "label": "Gomen",
+    "price": 130.43
+  },
+  {
+    "value": "guder-wine-small",
+    "label": "Guder",
+    "price": 217.39
+  },
+  {
+    "value": "habesha-areke",
+    "label": "Habesha areke",
+    "price": 30.43
+  },
+  {
+    "value": "heinken",
+    "label": "Heinken",
+    "price": 95.65
+  },
+  {
+    "value": "kamila-win-big",
+    "label": "Kamila win big",
+    "price": 608.69
+  },
+  {
+    "value": "negus",
+    "label": "Negus",
+    "price": 86.95
+  },
+  {
+    "value": "pasta-besigo",
+    "label": "Pasta besigo",
+    "price": 130.43
+  },
+  {
+    "value": "room-deluxe",
+    "label": "Room Deluxe",
+    "excelName": "Room",
+    "price": 347.82
+  },
+  {
+    "value": "room-standard",
+    "label": "Room Standard",
+    "excelName": "Room",
+    "price": 695.65
+  },
+  {
+    "value": "shero-feses",
+    "label": "Shero feses",
+    "price": 130.43
+  },
+  {
+    "value": "sofi",
+    "label": "Sofi",
+    "price": 86.95
+  },
+  {
+    "value": "soft-drink",
+    "label": "Soft drink",
+    "price": 52.17
+  },
+  {
+    "value": "tea",
+    "label": "Tea",
+    "price": 21.73
+  },
+  {
+    "value": "tegabino",
+    "label": "Tegabino",
+    "price": 147.82
+  },
+  {
+    "value": "tibs",
+    "label": "Tibs",
+    "price": 20
+  },
+  {
+    "value": "tomato-salad",
+    "label": "Tomato Salad",
+    "price": 130.43
+  },
+  {
+    "value": "water-half",
+    "label": "Water half",
+    "price": 30.43
+  },
+  {
+    "value": "water-one-liter",
+    "label": "Water one liter",
+    "price": 39.13
+  },
+  {
+    "value": "water-two-liter",
+    "label": "Water two liter",
+    "price": 52.17
+  },
+  {
+    "value": "yejebena-buna",
+    "label": "Yejebena buna",
+    "price": 26.08
+  },
+  {
+    "value": "yesom-ferfer",
+    "label": "Yesom ferfer",
+    "price": 130.43
+  }
+]
