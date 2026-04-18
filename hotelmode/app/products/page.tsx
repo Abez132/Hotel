@@ -119,11 +119,23 @@ export default function ProductsPage() {
   return (
     <main className="min-h-screen px-4 py-8 sm:px-8 sm:py-12">
       <Link
-                href="/"
-                className="mt-6 inline-flex h-11 items-center justify-center rounded-xl bg-[#0f1231] px-4 text-sm font-semibold text-white transition hover:bg-[#302724] "
-              >
-                back to home
-              </Link>
+        href="/"
+        className="mt-6 inline-flex h-11 items-center justify-center rounded-xl bg-[#0f1231] px-4 text-sm font-semibold text-white transition hover:bg-[#302724]"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          className="mr-2 h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+        Back
+      </Link>
       <section className="mx-auto w-full max-w-5xl rounded-3xl border border-white/40 bg-white/85 p-6 shadow-[0_20px_60px_rgba(10,36,64,0.18)] backdrop-blur md:p-10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -144,6 +156,18 @@ export default function ProductsPage() {
               onClick={addProduct}
               className="inline-flex h-11 items-center justify-center rounded-xl bg-[#0f2f45] px-4 text-sm font-semibold text-white transition hover:bg-[#174b69]"
             >
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="mr-2 h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 5v14M5 12h14" />
+              </svg>
               Add product
             </button>
             <button
@@ -152,6 +176,19 @@ export default function ProductsPage() {
               disabled={saving}
               className="inline-flex h-11 items-center justify-center rounded-xl bg-[#ff7f50] px-4 text-sm font-semibold text-white transition hover:bg-[#e96e3d] disabled:cursor-not-allowed disabled:opacity-60"
             >
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="mr-2 h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M4 4h12l4 4v12H4z" />
+                <path d="M8 4v6h8" />
+              </svg>
               {saving ? "Saving..." : "Save changes"}
             </button>
           </div>
@@ -223,6 +260,20 @@ export default function ProductsPage() {
                   onClick={() => removeProduct(index)}
                   className="inline-flex h-11 items-center justify-center rounded-xl border border-rose-200 px-4 text-sm font-semibold text-rose-700 transition hover:bg-rose-50"
                 >
+                  <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    className="mr-2 h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M3 6h18" />
+                    <path d="M8 6V4h8v2" />
+                    <path d="M6 6l1 14h10l1-14" />
+                  </svg>
                   Remove
                 </button>
               </div>
