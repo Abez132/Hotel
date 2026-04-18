@@ -172,6 +172,19 @@ export default function Home() {
           href="/products"
           className="mt-6 inline-flex h-11 items-center justify-center rounded-xl bg-[#ff7f50] px-4 text-sm font-semibold text-white transition hover:bg-[#e96e3d]"
         >
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            className="mr-2 h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="14" rx="2" />
+            <path d="M7 8h10M7 12h10" />
+          </svg>
           Manage products
         </Link>
 
@@ -213,6 +226,25 @@ export default function Home() {
               : "border-[#bfd4df] bg-white/90 text-[#0f2f45] hover:bg-white"
           }`}
         >
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            className="mr-2 inline h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            {isDark ? (
+              <>
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+              </>
+            ) : (
+              <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" />
+            )}
+          </svg>
           {isDark ? "Light Mode" : "Dark Mode"}
         </button>
 
@@ -355,6 +387,19 @@ export default function Home() {
                   : "bg-[#0f2f45] hover:bg-[#174b69] focus:ring-[#174b69]/30"
               }`}
             >
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="mr-2 h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M3 6h18M3 12h18M3 18h18" />
+                <path d="M7 6v12" />
+              </svg>
               Save Entry
             </button>
           </form>
