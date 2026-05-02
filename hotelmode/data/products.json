@@ -2,7 +2,7 @@
   {
     "value": "afagn",
     "label": "Afagn",
-    "price": 20
+    "price": 260.86
   },
   {
     "value": "ambo-wuha",
@@ -63,7 +63,7 @@
   {
     "value": "dulet",
     "label": "Dulet",
-    "price": 20
+    "price": 260.86
   },
   {
     "value": "gomen",
@@ -72,8 +72,13 @@
   },
   {
     "value": "guder-wine-small",
-    "label": "Guder",
+    "label": "Guder small",
     "price": 217.39
+  },
+  {
+    "value": "guder-wine-big",
+    "label": "Guder wine big",
+    "price": 478.26
   },
   {
     "value": "habesha-areke",
@@ -81,14 +86,24 @@
     "price": 30.43
   },
   {
+    "value": "half-injera",
+    "label": "half injera",
+    "price": 8.69
+  },
+  {
     "value": "heinken",
     "label": "Heinken",
     "price": 95.65
   },
   {
-    "value": "kamila-win-big",
-    "label": "Kamila win big",
+    "value": "kamila-wine-big",
+    "label": "Kamila wine big",
     "price": 608.69
+  },
+  {
+    "value": "meta",
+    "label": "Meta",
+    "price": 95.65
   },
   {
     "value": "negus",
@@ -102,7 +117,7 @@
   },
   {
     "value": "room-deluxe",
-    "label": "Room Deluxe",
+    "label": "Room small",
     "excelName": "Room",
     "price": 347.82
   },
@@ -111,6 +126,16 @@
     "label": "Room Standard",
     "excelName": "Room",
     "price": 695.65
+  },
+  {
+    "value": "sega-ferfer",
+    "label": "Sega ferfer",
+    "price": 173.91
+  },
+  {
+    "value": "senber-rube-kilo",
+    "label": "Senber rube kilo",
+    "price": 173.91
   },
   {
     "value": "shero-feses",
@@ -135,12 +160,12 @@
   {
     "value": "tegabino",
     "label": "Tegabino",
-    "price": 147.82
+    "price": 173.91
   },
   {
     "value": "tibs",
     "label": "Tibs",
-    "price": 20
+    "price": 347.82
   },
   {
     "value": "tomato-salad",
@@ -155,12 +180,12 @@
   {
     "value": "water-one-liter",
     "label": "Water one liter",
-    "price": 39.13
+    "price": 43.47
   },
   {
     "value": "water-two-liter",
     "label": "Water two liter",
-    "price": 52.17
+    "price": 60.86
   },
   {
     "value": "yejebena-buna",
@@ -170,6 +195,6 @@
   {
     "value": "yesom-ferfer",
     "label": "Yesom ferfer",
-    "price": 130.43
+    "price": 147.82
   }
 ]

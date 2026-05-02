@@ -170,7 +170,7 @@ export default function Home() {
 
         <Link
           href="/products"
-          className="mt-6 inline-flex h-11 items-center justify-center rounded-xl bg-[#ff7f50] px-4 text-sm font-semibold text-white transition hover:bg-[#e96e3d]"
+          className="mt-6 inline-flex h-11 items-center justify-center rounded-xl bg-[#631c03] px-4 text-sm font-semibold text-white transition hover:bg-[#e96e3d]"
         >
           <svg
             viewBox="0 0 24 24"
@@ -197,7 +197,7 @@ export default function Home() {
           <div className="mt-3 max-h-[60vh] space-y-2 overflow-auto pr-1">
             {products.map((product) => (
               <div
-                key={product.value}
+                key={product.label}
                 className={`rounded-xl px-3 py-2 text-sm ${isDark ? "bg-white/5" : "bg-[#f5fbff]"}`}
               >
                 <div className="font-semibold">{product.label}</div>
