@@ -34,7 +34,7 @@ function normalizeProduct(product) {
     value,
     label: String(product?.label ?? "").trim(),
     excelName: String(product?.excelName ?? "").trim() || undefined,
-    price: Number(product?.price ?? 0),
+    price: parseFloat(parseFloat(product?.price ?? 0).toFixed(2)),
   };
 }
 

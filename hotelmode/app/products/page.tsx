@@ -66,7 +66,10 @@ export default function ProductsPage() {
         currentIndex === index
           ? {
               ...product,
-              [field]: field === "price" ? Number(value) : value,
+              [field]:
+                field === "price"
+                  ? parseFloat(parseFloat(String(value)).toFixed(2))
+                  : value,
             }
           : product,
       ),
