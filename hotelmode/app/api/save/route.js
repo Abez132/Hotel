@@ -56,8 +56,6 @@ function creatingRow(body){
     return null;
   }
 
-    console.log(sum);
-    console.log(pricing);
   return {
       fs: String(body?.fs ?? "").trim(),
         goods: selected.excelName ?? selected.label ?? String(body?.goods ?? "").trim(),

@@ -22,7 +22,12 @@
   {
     "value": "awash-wine-big",
     "label": "Awash wine",
-    "price": 434.78
+    "price": 478.26
+  },
+  {
+    "value": "awash-wine-small",
+    "label": "Awash wine small",
+    "price": 217.39
   },
   {
     "value": "bedele-spe",
@@ -68,7 +73,7 @@
   {
     "value": "gomen",
     "label": "Gomen",
-    "price": 130.43
+    "price": 147.82
   },
   {
     "value": "guder-wine-small",
@@ -113,7 +118,7 @@
   {
     "value": "pasta-besigo",
     "label": "Pasta besigo",
-    "price": 130.43
+    "price": 147.82
   },
   {
     "value": "room-deluxe",
@@ -140,7 +145,7 @@
   {
     "value": "shero-feses",
     "label": "Shero feses",
-    "price": 130.43
+    "price": 147.82
   },
   {
     "value": "sofi",
