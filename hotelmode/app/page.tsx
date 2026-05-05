@@ -282,13 +282,13 @@ export default function Home() {
         ) : null}
 
         <div
-          className={`pointer-events-none absolute -left-20 top-0 h-72 w-72 rounded-full blur-3xl animate-float-slow ${isDark ? "bg-[#1f4f6d]/40" : "bg-[#ffd447]/55"}`}
+          className={`pointer-events-none absolute -left-20 top-0 h-72 w-72 rounded-full blur-3xl animate-float-slow will-change-transform ${isDark ? "bg-[#1f4f6d]/40" : "bg-[#ffd447]/55"}`}
         />
         <div
-          className={`pointer-events-none absolute -right-12 top-1/3 h-64 w-64 rounded-full blur-3xl animate-float-delayed ${isDark ? "bg-[#2f7aa8]/35" : "bg-[#ff7f50]/40"}`}
+          className={`pointer-events-none absolute -right-12 top-1/3 h-64 w-64 rounded-full blur-3xl animate-float-delayed will-change-transform ${isDark ? "bg-[#2f7aa8]/35" : "bg-[#ff7f50]/40"}`}
         />
         <div
-          className={`pointer-events-none absolute bottom-0 left-1/3 h-72 w-72 rounded-full blur-3xl animate-float-slow ${isDark ? "bg-[#3ca7a5]/25" : "bg-[#7ad8ff]/35"}`}
+          className={`pointer-events-none absolute bottom-0 left-1/3 h-72 w-72 rounded-full blur-3xl animate-float-slow will-change-transform ${isDark ? "bg-[#3ca7a5]/25" : "bg-[#7ad8ff]/35"}`}
         />
 
         <section
