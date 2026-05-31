@@ -37,8 +37,7 @@ function normalizeText(value) {
     .replace(/^-+|-+$/g, "");
 }
 
-function creatingRow(body){
-
+function creatingRow(body) {
   var pricing;
   var sum;
   const goodsValue = normalizeText(body?.goods);
@@ -48,35 +47,46 @@ function creatingRow(body){
     const candidateLabel = normalizeText(product?.label);
     return candidateValue === goodsValue || candidateLabel === goodsValue;
   });
-  if(selected){
-    pricing=Number(selected.price);
+  if (selected) {
+    pricing = Number(selected.price);
 
-    sum=pricing*Number(body?.amount ?? 0);
-  }else{
+    sum = pricing * Number(body?.amount ?? 0);
+  } else {
     return null;
   }
 
   return {
-      fs: String(body?.fs ?? "").trim(),
-        goods: selected.excelName ?? selected.label ?? String(body?.goods ?? "").trim(),
-      amount: String(body?.amount ?? "").trim(),
-      price:pricing,
-      sums:sum,
-    };
-};
+    fs: String(body?.fs ?? "").trim(),
+    date: String(body?.date ?? "").trim(),
+    goods:
+      selected.excelName ?? selected.label ?? String(body?.goods ?? "").trim(),
+    amount: String(body?.amount ?? "").trim(),
+    price: pricing,
+    sums: sum,
+  };
+}
 
 export async function POST(req) {
   try {
     const body = await req.json();
 
-   const row= creatingRow(body);
+    const row = creatingRow(body);
 
     if (!row) {
       return Response.json({ message: "Invalid goods value" }, { status: 400 });
     }
 
-    if (!row.fs || !row.goods || !row.amount || row.price == null || row.sums == null) {
-      return Response.json({ message: "Missing required fields" }, { status: 400 });
+    if (
+      !row.fs ||
+      !row.goods ||
+      !row.amount ||
+      row.price == null ||
+      row.sums == null
+    ) {
+      return Response.json(
+        { message: "Missing required fields" },
+        { status: 400 },
+      );
     }
 
     const filePath = path.join(process.cwd(), "data.xlsx");
@@ -95,6 +105,7 @@ export async function POST(req) {
     const existingData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
     const normalizedData = existingData.map((item) => ({
       fs: String(item?.fs ?? "").trim(),
+      date: String(item?.date ?? "").trim(),
       goods: String(item?.goods ?? "").trim(),
       amount: String(item?.amount ?? "").trim(),
       price: item?.price ?? 0,
@@ -102,8 +113,15 @@ export async function POST(req) {
     }));
     normalizedData.push(row);
 
+    normalizedData.sort((a, b) =>
+      String(a.fs).localeCompare(String(b.fs), undefined, {
+        numeric: true,
+        sensitivity: "base",
+      }),
+    );
+
     const newSheet = XLSX.utils.json_to_sheet(normalizedData, {
-      header: ["fs", "goods", "amount" , "price" ,"sums"],
+      header: ["fs", "date", "goods", "amount", "price", "sums"],
     });
     workbook.SheetNames = [];
     workbook.Sheets = {};
@@ -113,6 +131,9 @@ export async function POST(req) {
     return Response.json({ message: "Saved!", data: row });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    return Response.json({ message: "Failed to save data", error: message }, { status: 500 });
+    return Response.json(
+      { message: "Failed to save data", error: message },
+      { status: 500 },
+    );
   }
 }

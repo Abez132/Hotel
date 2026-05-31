@@ -39,6 +39,10 @@ export default function Home() {
     message: string;
   } | null>(null);
   const [products, setProducts] = useState<Product[]>(fallbackProducts);
+  const [date, setDate] = useState<string>(() => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  });
 
   useEffect(() => {
     const savedTheme = window.localStorage.getItem("theme");
@@ -97,6 +101,7 @@ export default function Home() {
       fs: String(formDataObj.get("fs") ?? ""),
       goods: String(formDataObj.get("goods") ?? ""),
       amount: String(formDataObj.get("amount") ?? ""),
+      date,
     };
     try {
       const response = await fetch("/api/save", {
@@ -304,11 +309,33 @@ export default function Home() {
               : "border-[#e5e7eb] bg-white/90"
           }`}
         >
-          <p
-            className={`text-xs font-semibold uppercase tracking-[0.2em] ${isDark ? "text-[#6b7280]" : "text-[#6b7280]"}`}
-          >
-            Hotel Transnvenia
-          </p>
+          <div className="relative">
+            <p
+              className={`text-xs font-semibold uppercase tracking-[0.2em] ${isDark ? "text-[#6b7280]" : "text-[#6b7280]"}`}
+            >
+              Hotel Transnvenia
+            </p>
+
+            {/* Date — top right of card */}
+            <div className="absolute right-0 top-0 grid gap-1">
+              <span
+                className={`text-xs font-semibold ${isDark ? "text-[#6b7280]" : "text-[#6b7280]"}`}
+              >
+                Date
+              </span>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                required
+                className={`h-9 rounded-xl border px-3 text-sm outline-none transition focus:ring-4 ${
+                  isDark
+                    ? "border-[#1f2937] bg-[#050814] text-[#f9fafb] focus:border-[#6b7280] focus:ring-[#6b7280]/20 [color-scheme:dark]"
+                    : "border-[#e5e7eb] bg-white text-[#1f2937] focus:border-[#6b7280] focus:ring-[#6b7280]/15"
+                }`}
+              />
+            </div>
+          </div>
           <h1
             className={`mt-2 text-balance text-3xl font-extrabold leading-tight sm:text-4xl ${isDark ? "text-[#f9fafb]" : "text-[#1f2937]"}`}
           >

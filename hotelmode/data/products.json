@@ -50,6 +50,11 @@
     "price": 13.04
   },
   {
+    "value": "denech-besiga",
+    "label": "denech besiga",
+    "price": 173.91
+  },
+  {
     "value": "double-bed",
     "label": "Double bed",
     "excelName": "Double bed",
@@ -109,6 +114,11 @@
     "value": "meta",
     "label": "Meta",
     "price": 95.65
+  },
+  {
+    "value": "mini-gin",
+    "label": "Mini gin",
+    "price": 260.86
   },
   {
     "value": "negus",
@@ -175,7 +185,7 @@
   {
     "value": "tomato-salad",
     "label": "Tomato Salad",
-    "price": 130.43
+    "price": 147.82
   },
   {
     "value": "water-half",
