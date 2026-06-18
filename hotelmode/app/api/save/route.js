@@ -55,9 +55,12 @@ function creatingRow(body) {
     return null;
   }
 
+  const rawDate = String(body?.date ?? "").trim();
+  const formattedDate = rawDate ? rawDate.split("-").reverse().join("/") : "";
+
   return {
     fs: String(body?.fs ?? "").trim(),
-    date: String(body?.date ?? "").trim(),
+    date: formattedDate,
     goods:
       selected.excelName ?? selected.label ?? String(body?.goods ?? "").trim(),
     amount: String(body?.amount ?? "").trim(),

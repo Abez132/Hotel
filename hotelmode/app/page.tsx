@@ -330,7 +330,7 @@ export default function Home() {
                 required
                 className={`h-9 rounded-xl border px-3 text-sm outline-none transition focus:ring-4 ${
                   isDark
-                    ? "border-[#1f2937] bg-[#050814] text-[#f9fafb] focus:border-[#6b7280] focus:ring-[#6b7280]/20 [color-scheme:dark]"
+                    ? "border-[#1f2937] bg-[#050814] text-[#f9fafb] focus:border-[#6b7280] focus:ring-[#6b7280]/20 scheme:dark"
                     : "border-[#e5e7eb] bg-white text-[#1f2937] focus:border-[#6b7280] focus:ring-[#6b7280]/15"
                 }`}
               />
