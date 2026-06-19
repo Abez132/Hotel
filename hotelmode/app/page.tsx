@@ -41,7 +41,10 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>(fallbackProducts);
   const [date, setDate] = useState<string>(() => {
     const today = new Date();
-    return today.toISOString().split("T")[0];
+    const dd = String(today.getDate()).padStart(2, "0");
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const yyyy = today.getFullYear();
+    return `${dd}/${mm}/${yyyy}`;
   });
 
   useEffect(() => {
@@ -324,14 +327,15 @@ export default function Home() {
                 Date
               </span>
               <input
-                type="date"
+                type="text"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
+                placeholder="DD/MM/YYYY"
                 required
                 className={`h-9 rounded-xl border px-3 text-sm outline-none transition focus:ring-4 ${
                   isDark
-                    ? "border-[#1f2937] bg-[#050814] text-[#f9fafb] focus:border-[#6b7280] focus:ring-[#6b7280]/20 scheme:dark"
-                    : "border-[#e5e7eb] bg-white text-[#1f2937] focus:border-[#6b7280] focus:ring-[#6b7280]/15"
+                    ? "border-[#1f2937] bg-[#050814] text-[#f9fafb] placeholder:text-[#6b7280] focus:border-[#6b7280] focus:ring-[#6b7280]/20"
+                    : "border-[#e5e7eb] bg-white text-[#1f2937] placeholder:text-[#9ca3af] focus:border-[#6b7280] focus:ring-[#6b7280]/15"
                 }`}
               />
             </div>
