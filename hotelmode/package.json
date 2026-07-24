@@ -4,12 +4,17 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "node scripts/seed.js",
+    "db:migrate": "prisma migrate deploy",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@prisma/client": "6.8.2",
     "next": "16.1.6",
+    "prisma": "6.8.2",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "xlsx": "^0.18.5"

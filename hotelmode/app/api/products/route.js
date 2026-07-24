@@ -1,88 +1,109 @@
-import fs from "fs";
-import path from "path";
+import prisma from "@/lib/db";
 
 export const runtime = "nodejs";
 
-const productsFilePath = path.join(process.cwd(), "data", "products.json");
-
-function ensureProductsFile() {
-  const directory = path.dirname(productsFilePath);
-  if (!fs.existsSync(directory)) {
-    fs.mkdirSync(directory, { recursive: true });
-  }
-
-  if (!fs.existsSync(productsFilePath)) {
-    fs.writeFileSync(productsFilePath, "[]", "utf8");
-  }
-}
-
-function readProducts() {
-  ensureProductsFile();
-  const raw = fs.readFileSync(productsFilePath, "utf8");
-  const parsed = JSON.parse(raw);
-  return Array.isArray(parsed) ? parsed : [];
-}
-
-function normalizeProduct(product) {
-  const value = String(product?.value ?? "")
+function normalizeValue(value) {
+  return String(value ?? "")
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
 
+function normalizeProduct(product) {
   return {
-    value,
+    value: normalizeValue(product?.value),
     label: String(product?.label ?? "").trim(),
-    excelName: String(product?.excelName ?? "").trim() || undefined,
+    excelName: String(product?.excelName ?? "").trim() || null,
     price: parseFloat(parseFloat(product?.price ?? 0).toFixed(2)),
   };
 }
 
-function isValidProduct(product) {
-  return Boolean(product.value && product.label && Number.isFinite(product.price));
+function isValidProduct(p) {
+  return Boolean(p.value && p.label && Number.isFinite(p.price));
+}
+
+function toClientProduct(p) {
+  return {
+    value: p.value,
+    label: p.label,
+    ...(p.excelName ? { excelName: p.excelName } : {}),
+    price: parseFloat(p.price),
+  };
 }
 
 export async function GET() {
   try {
-    const products = readProducts();
-    return Response.json({ products });
+    const products = await prisma.product.findMany({
+      orderBy: { label: "asc" },
+    });
+    return Response.json({ products: products.map(toClientProduct) });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    return Response.json({ message: "Failed to read products", error: message }, { status: 500 });
+    return Response.json(
+      { message: "Failed to read products", error: message },
+      { status: 500 },
+    );
   }
 }
 
 export async function POST(req) {
   try {
     const body = await req.json();
-    const incomingProducts = Array.isArray(body?.products) ? body.products : body?.product ? [body.product] : [];
+    const incoming = Array.isArray(body?.products)
+      ? body.products
+      : body?.product
+        ? [body.product]
+        : [];
 
-    if (!incomingProducts.length) {
-      return Response.json({ message: "No products received" }, { status: 400 });
+    if (!incoming.length) {
+      return Response.json(
+        { message: "No products received" },
+        { status: 400 },
+      );
     }
 
-    const normalizedIncoming = incomingProducts.map(normalizeProduct).filter(isValidProduct);
-    if (!normalizedIncoming.length) {
-      return Response.json({ message: "Invalid product data" }, { status: 400 });
+    const normalized = incoming.map(normalizeProduct).filter(isValidProduct);
+    if (!normalized.length) {
+      return Response.json(
+        { message: "Invalid product data" },
+        { status: 400 },
+      );
     }
 
-    const existingProducts = readProducts();
-    const byValue = new Map(existingProducts.map((product) => [String(product.value).toLowerCase(), product]));
+    // Upsert each product, then delete anything not in the submitted list
+    await prisma.$transaction([
+      // Upsert all submitted products
+      ...normalized.map((p) =>
+        prisma.product.upsert({
+          where: { value: p.value },
+          update: { label: p.label, excelName: p.excelName, price: p.price },
+          create: {
+            value: p.value,
+            label: p.label,
+            excelName: p.excelName,
+            price: p.price,
+          },
+        }),
+      ),
+      // Remove products the client no longer has in its list
+      prisma.product.deleteMany({
+        where: { value: { notIn: normalized.map((p) => p.value) } },
+      }),
+    ]);
 
-    for (const product of normalizedIncoming) {
-      byValue.set(product.value, {
-        ...product,
-        ...(product.excelName ? { excelName: product.excelName } : {}),
-      });
-    }
-
-    const savedProducts = Array.from(byValue.values()).sort((left, right) => left.label.localeCompare(right.label));
-    ensureProductsFile();
-    fs.writeFileSync(productsFilePath, JSON.stringify(savedProducts, null, 2), "utf8");
-
-    return Response.json({ message: "Products saved", products: savedProducts });
+    const products = await prisma.product.findMany({
+      orderBy: { label: "asc" },
+    });
+    return Response.json({
+      message: "Products saved",
+      products: products.map(toClientProduct),
+    });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    return Response.json({ message: "Failed to save products", error: message }, { status: 500 });
+    return Response.json(
+      { message: "Failed to save products", error: message },
+      { status: 500 },
+    );
   }
 }
