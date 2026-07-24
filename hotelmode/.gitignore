@@ -12,6 +12,7 @@
 !.yarn/versions
 
 data.xlsx
+/data
 
 # testing
 /coverage
