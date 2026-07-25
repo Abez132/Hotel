@@ -1,13 +1,6 @@
-import * as XLSX from "xlsx";
-import fs from "fs";
-import { join } from "path";
-import prisma from "@/lib/db";
+import prisma, { withRetry } from "@/lib/db";
 
 export const runtime = "nodejs";
-
-if (typeof XLSX.set_fs === "function") {
-  XLSX.set_fs(fs);
-}
 
 function normalizeText(value) {
   return String(value ?? "")
@@ -20,14 +13,12 @@ function normalizeText(value) {
 async function resolveProduct(goodsInput) {
   const normalized = normalizeText(goodsInput);
 
-  // Try exact value match first
-  let product = await prisma.product.findUnique({
-    where: { value: normalized },
-  });
+  let product = await withRetry(() =>
+    prisma.product.findUnique({ where: { value: normalized } }),
+  );
 
-  // Fall back to scanning by normalized label
   if (!product) {
-    const all = await prisma.product.findMany();
+    const all = await withRetry(() => prisma.product.findMany());
     product = all.find((p) => normalizeText(p.label) === normalized) ?? null;
   }
 
@@ -58,39 +49,11 @@ export async function POST(req) {
     const sums = parseFloat((price * amount).toFixed(2));
     const goods = product.excelName ?? product.label;
 
-    // Persist entry to Postgres via Prisma
-    await prisma.entry.create({
-      data: { fs: fsValue, date, goods, amount, price, sums },
-    });
-
-    // Regenerate data.xlsx from all entries sorted by fs
-    const allEntries = await prisma.entry.findMany({
-      orderBy: [{ fs: "asc" }, { id: "asc" }],
-    });
-
-    const rows = allEntries.map((e) => ({
-      fs: e.fs,
-      date: e.date,
-      goods: e.goods,
-      amount: e.amount,
-      price: parseFloat(e.price),
-      sums: parseFloat(e.sums),
-    }));
-
-    const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.json_to_sheet(rows, {
-      header: ["fs", "date", "goods", "amount", "price", "sums"],
-    });
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-    const excelDir = join(process.cwd(), "excel");
-    const filePath = join(excelDir, "data.xlsx");
-
-    // Ensure the directory exists (important for Docker volume mount)
-    if (!fs.existsSync(excelDir)) {
-      fs.mkdirSync(excelDir, { recursive: true });
-    }
-
-    XLSX.writeFile(workbook, filePath);
+    await withRetry(() =>
+      prisma.entry.create({
+        data: { fs: fsValue, date, goods, amount, price, sums },
+      }),
+    );
 
     return Response.json({
       message: "Saved!",

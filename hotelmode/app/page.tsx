@@ -189,6 +189,31 @@ export default function Home() {
           Manage products
         </Link>
 
+        <Link
+          href="/entries"
+          className={`mt-3 inline-flex h-11 items-center justify-center rounded-xl border px-4 text-sm font-semibold transition hover:-translate-y-0.5 ${
+            isDark
+              ? "border-[#1f2937] bg-[#101522] text-[#f9fafb] hover:bg-[#1f2937]"
+              : "border-[#e5e7eb] bg-white text-[#1f2937] hover:bg-[#f3f4f6]"
+          }`}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            className="mr-2 h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" />
+            <rect x="9" y="3" width="6" height="4" rx="1" />
+            <path d="M9 12h6M9 16h4" />
+          </svg>
+          View entries
+        </Link>
+
         <div
           className={`mt-8 rounded-2xl border p-4 ${
             isDark

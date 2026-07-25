@@ -25,10 +25,6 @@ services:
     environment:
       DATABASE_URL: postgres://hotelmode:hotelmode@db:5432/hotelmode
       DATABASE_SSL: "false"
-    volumes:
-      # Persist the generated Excel file between restarts
-      - excel_data:/app/excel
 
 volumes:
   postgres_data:
-  excel_data:

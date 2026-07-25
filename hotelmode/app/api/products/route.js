@@ -1,4 +1,4 @@
-import prisma from "@/lib/db";
+import prisma, { withRetry } from "@/lib/db";
 
 export const runtime = "nodejs";
 
@@ -34,9 +34,9 @@ function toClientProduct(p) {
 
 export async function GET() {
   try {
-    const products = await prisma.product.findMany({
-      orderBy: { label: "asc" },
-    });
+    const products = await withRetry(() =>
+      prisma.product.findMany({ orderBy: { label: "asc" } }),
+    );
     return Response.json({ products: products.map(toClientProduct) });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
@@ -71,30 +71,29 @@ export async function POST(req) {
       );
     }
 
-    // Upsert each product, then delete anything not in the submitted list
-    await prisma.$transaction([
-      // Upsert all submitted products
-      ...normalized.map((p) =>
-        prisma.product.upsert({
-          where: { value: p.value },
-          update: { label: p.label, excelName: p.excelName, price: p.price },
-          create: {
-            value: p.value,
-            label: p.label,
-            excelName: p.excelName,
-            price: p.price,
-          },
+    await withRetry(() =>
+      prisma.$transaction([
+        ...normalized.map((p) =>
+          prisma.product.upsert({
+            where: { value: p.value },
+            update: { label: p.label, excelName: p.excelName, price: p.price },
+            create: {
+              value: p.value,
+              label: p.label,
+              excelName: p.excelName,
+              price: p.price,
+            },
+          }),
+        ),
+        prisma.product.deleteMany({
+          where: { value: { notIn: normalized.map((p) => p.value) } },
         }),
-      ),
-      // Remove products the client no longer has in its list
-      prisma.product.deleteMany({
-        where: { value: { notIn: normalized.map((p) => p.value) } },
-      }),
-    ]);
+      ]),
+    );
 
-    const products = await prisma.product.findMany({
-      orderBy: { label: "asc" },
-    });
+    const products = await withRetry(() =>
+      prisma.product.findMany({ orderBy: { label: "asc" } }),
+    );
     return Response.json({
       message: "Products saved",
       products: products.map(toClientProduct),
