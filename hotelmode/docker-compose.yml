@@ -27,7 +27,7 @@ services:
       DATABASE_SSL: "false"
     volumes:
       # Persist the generated Excel file between restarts
-      - excel_data:/app/data.xlsx
+      - excel_data:/app/excel
 
 volumes:
   postgres_data:

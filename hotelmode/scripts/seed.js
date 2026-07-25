@@ -1,19 +1,17 @@
+"use strict";
 /**
  * Seed the database with products from data/products.json.
  *
  *   node scripts/seed.js
  *
- * Requires DATABASE_URL in .env or .env.local.
+ * Requires DATABASE_URL in environment or .env.local
  */
 
 import { readFileSync } from "fs";
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
+import { join } from "path";
 import { PrismaClient } from "@prisma/client";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-// Manually load .env.local so we don't need dotenv as a dependency
+// Manually load .env.local if present (no dotenv dependency needed)
 try {
   const lines = readFileSync(join(__dirname, "..", ".env.local"), "utf8").split(
     "\n",
@@ -24,11 +22,14 @@ try {
     const eq = trimmed.indexOf("=");
     if (eq < 0) continue;
     const key = trimmed.slice(0, eq).trim();
-    const val = trimmed.slice(eq + 1).trim();
+    const val = trimmed
+      .slice(eq + 1)
+      .trim()
+      .replace(/^"|"$/g, "");
     if (!process.env[key]) process.env[key] = val;
   }
 } catch {
-  // no .env.local — rely on environment
+  // no .env.local — rely on environment variables
 }
 
 const prisma = new PrismaClient();

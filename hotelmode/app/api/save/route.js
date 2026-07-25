@@ -82,7 +82,15 @@ export async function POST(req) {
       header: ["fs", "date", "goods", "amount", "price", "sums"],
     });
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-    XLSX.writeFile(workbook, join(process.cwd(), "data.xlsx"));
+    const excelDir = join(process.cwd(), "excel");
+    const filePath = join(excelDir, "data.xlsx");
+
+    // Ensure the directory exists (important for Docker volume mount)
+    if (!fs.existsSync(excelDir)) {
+      fs.mkdirSync(excelDir, { recursive: true });
+    }
+
+    XLSX.writeFile(workbook, filePath);
 
     return Response.json({
       message: "Saved!",
