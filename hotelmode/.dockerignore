@@ -1,0 +1,41 @@
+# The single biggest culprit — never send node_modules to the daemon
+node_modules
+
+# Next.js build output (rebuilt inside Docker)
+.next
+out
+
+# Git
+.git
+.gitignore
+
+# Local env files
+.env
+.env.local
+.env*.local
+
+# Dev / editor
+.vscode
+.idea
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Excel output (generated at runtime)
+excel
+data.xlsx
+
+# Test / coverage
+coverage
+__tests__
+
+# Docker files themselves (no need to copy in)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Prisma generated client (regenerated during build)
+node_modules/.prisma

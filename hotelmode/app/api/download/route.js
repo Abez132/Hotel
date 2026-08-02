@@ -12,22 +12,55 @@ export async function GET() {
   try {
     const allEntries = await withRetry(() =>
       prisma.entry.findMany({
-        orderBy: [{ fs: "asc" }, { id: "asc" }],
+        orderBy: [{ date: "asc" }, { fs: "asc" }, { id: "asc" }],
       }),
     );
 
-    const rows = allEntries.map((e) => ({
-      fs: e.fs,
-      date: e.date,
-      goods: e.goods,
-      amount: e.amount,
-      price: parseFloat(e.price),
-      sums: parseFloat(e.sums),
-    }));
+    // Columns: fs | date | goods | amount | price | sums | daily_total
+    // daily_total is blank for every regular row and filled only on the
+    // totals row that appears after the last entry of each date.
+    const rows = [];
+    let i = 0;
+
+    while (i < allEntries.length) {
+      const currentDate = allEntries[i].date;
+      const group = [];
+
+      while (i < allEntries.length && allEntries[i].date === currentDate) {
+        const e = allEntries[i];
+        group.push({
+          fs: e.fs,
+          date: e.date,
+          goods: e.goods,
+          amount: e.amount,
+          price: parseFloat(e.price),
+          sums: parseFloat(e.sums),
+          daily_total: "", // blank for regular rows
+        });
+        i++;
+      }
+
+      rows.push(...group);
+
+      // Totals row — daily_total column holds the sum
+      const totalSums = parseFloat(
+        group.reduce((a, r) => a + r.sums, 0).toFixed(2),
+      );
+      const totalAmount = group.reduce((a, r) => a + r.amount, 0);
+      rows.push({
+        fs: "TOTAL",
+        date: currentDate,
+        goods: "",
+        amount: totalAmount,
+        price: "",
+        sums: "",
+        daily_total: totalSums,
+      });
+    }
 
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.json_to_sheet(rows, {
-      header: ["fs", "date", "goods", "amount", "price", "sums"],
+      header: ["fs", "date", "goods", "amount", "price", "sums", "daily_total"],
     });
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
 
