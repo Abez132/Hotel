@@ -1,4 +1,5 @@
 import prisma, { withRetry } from "@/lib/db";
+import { auth } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
@@ -10,15 +11,22 @@ function normalizeText(value) {
     .replace(/^-+|-+$/g, "");
 }
 
-async function resolveProduct(goodsInput) {
+async function resolveProduct(goodsInput, userId) {
   const normalized = normalizeText(goodsInput);
 
   let product = await withRetry(() =>
-    prisma.product.findUnique({ where: { value: normalized } }),
+    prisma.product.findFirst({
+      where: {
+        value: normalized,
+        userId: userId,
+      },
+    }),
   );
 
   if (!product) {
-    const all = await withRetry(() => prisma.product.findMany());
+    const all = await withRetry(() =>
+      prisma.product.findMany({ where: { userId: userId } }),
+    );
     product = all.find((p) => normalizeText(p.label) === normalized) ?? null;
   }
 
@@ -27,6 +35,11 @@ async function resolveProduct(goodsInput) {
 
 export async function POST(req) {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return Response.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await req.json();
 
     const fsValue = String(body?.fs ?? "").trim();
@@ -40,7 +53,7 @@ export async function POST(req) {
       );
     }
 
-    const product = await resolveProduct(body.goods);
+    const product = await resolveProduct(body.goods, session.user.id);
     if (!product) {
       return Response.json({ message: "Invalid goods value" }, { status: 400 });
     }
@@ -51,7 +64,15 @@ export async function POST(req) {
 
     await withRetry(() =>
       prisma.entry.create({
-        data: { fs: fsValue, date, goods, amount, price, sums },
+        data: {
+          fs: fsValue,
+          date,
+          goods,
+          amount,
+          price,
+          sums,
+          userId: session.user.id,
+        },
       }),
     );
 

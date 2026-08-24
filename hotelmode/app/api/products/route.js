@@ -1,4 +1,5 @@
 import prisma, { withRetry } from "@/lib/db";
+import { auth } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
@@ -34,8 +35,16 @@ function toClientProduct(p) {
 
 export async function GET() {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return Response.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const products = await withRetry(() =>
-      prisma.product.findMany({ orderBy: { label: "asc" } }),
+      prisma.product.findMany({
+        where: { userId: session.user.id },
+        orderBy: { label: "asc" },
+      }),
     );
     return Response.json({ products: products.map(toClientProduct) });
   } catch (error) {
@@ -49,6 +58,11 @@ export async function GET() {
 
 export async function POST(req) {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return Response.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await req.json();
     const incoming = Array.isArray(body?.products)
       ? body.products
@@ -82,17 +96,24 @@ export async function POST(req) {
               label: p.label,
               excelName: p.excelName,
               price: p.price,
+              userId: session.user.id,
             },
           }),
         ),
         prisma.product.deleteMany({
-          where: { value: { notIn: normalized.map((p) => p.value) } },
+          where: {
+            userId: session.user.id,
+            value: { notIn: normalized.map((p) => p.value) },
+          },
         }),
       ]),
     );
 
     const products = await withRetry(() =>
-      prisma.product.findMany({ orderBy: { label: "asc" } }),
+      prisma.product.findMany({
+        where: { userId: session.user.id },
+        orderBy: { label: "asc" },
+      }),
     );
     return Response.json({
       message: "Products saved",

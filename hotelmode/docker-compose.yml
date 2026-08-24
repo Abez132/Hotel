@@ -2,6 +2,8 @@ services:
   db:
     image: postgres:16-alpine
     restart: unless-stopped
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_DB: hotelmode
       POSTGRES_USER: hotelmode
@@ -25,6 +27,8 @@ services:
     environment:
       DATABASE_URL: postgres://hotelmode:hotelmode@db:5432/hotelmode
       DATABASE_SSL: "false"
+      AUTH_SECRET: ${AUTH_SECRET:-change-this-to-a-random-secret-in-production}
+      AUTH_URL: ${AUTH_URL:-http://localhost:3000}
 
 volumes:
   postgres_data:

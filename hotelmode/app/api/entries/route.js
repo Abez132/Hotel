@@ -1,12 +1,21 @@
 import prisma, { withRetry } from "@/lib/db";
+import { auth } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
 // GET /api/entries
 export async function GET() {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return Response.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const entries = await withRetry(() =>
-      prisma.entry.findMany({ orderBy: [{ fs: "asc" }, { id: "asc" }] }),
+      prisma.entry.findMany({
+        where: { userId: session.user.id },
+        orderBy: [{ fs: "asc" }, { id: "asc" }],
+      }),
     );
     return Response.json({
       entries: entries.map((e) => ({
@@ -31,6 +40,11 @@ export async function GET() {
 // PATCH /api/entries — update a single entry { id, fs?, date?, goods?, amount?, price? }
 export async function PATCH(req) {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return Response.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await req.json();
     const id = parseInt(String(body?.id ?? ""), 10);
     if (!id || isNaN(id)) {
@@ -42,6 +56,11 @@ export async function PATCH(req) {
     );
     if (!existing) {
       return Response.json({ message: "Entry not found" }, { status: 404 });
+    }
+
+    // Check if entry belongs to user
+    if (existing.userId !== session.user.id) {
+      return Response.json({ message: "Forbidden" }, { status: 403 });
     }
 
     const fs = body.fs !== undefined ? String(body.fs).trim() : existing.fs;
@@ -89,6 +108,11 @@ export async function PATCH(req) {
 // DELETE /api/entries — delete a single entry { id }
 export async function DELETE(req) {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return Response.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await req.json();
     const id = parseInt(String(body?.id ?? ""), 10);
     if (!id || isNaN(id)) {
@@ -100,6 +124,11 @@ export async function DELETE(req) {
     );
     if (!existing) {
       return Response.json({ message: "Entry not found" }, { status: 404 });
+    }
+
+    // Check if entry belongs to user
+    if (existing.userId !== session.user.id) {
+      return Response.json({ message: "Forbidden" }, { status: 403 });
     }
 
     await withRetry(() => prisma.entry.delete({ where: { id } }));

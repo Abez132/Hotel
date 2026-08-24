@@ -1,5 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import SessionProvider from "./components/SessionProvider";
+import Navbar from "./components/Navbar";
 
 export const metadata: Metadata = {
   title: "Hotelmode",
@@ -13,7 +15,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <SessionProvider>
+          <Navbar />
+          {children}
+        </SessionProvider>
+      </body>
     </html>
   );
 }
