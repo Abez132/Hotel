@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Product = {
   value: string;
@@ -34,9 +34,12 @@ const fallbackProducts: Product[] = [
 
 export default function Home() {
   const [isDark, setIsDark] = useState(true);
+  const savingRef = useRef(false);
+  const popupKeyRef = useRef(0);
   const [popup, setPopup] = useState<{
     type: "success" | "error";
     message: string;
+    key: number;
   } | null>(null);
   const [products, setProducts] = useState<Product[]>(fallbackProducts);
   const [date, setDate] = useState<string>(() => {
@@ -98,6 +101,8 @@ export default function Home() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (savingRef.current) return;
+    savingRef.current = true;
     const form = event.currentTarget;
     const formDataObj = new FormData(form);
     const formData = {
@@ -120,21 +125,32 @@ export default function Home() {
             : typeof payload?.message === "string"
               ? payload.message
               : "Failed to save data.";
-        setPopup({ type: "error", message: errorMessage });
+        setPopup({
+          type: "error",
+          message: errorMessage,
+          key: ++popupKeyRef.current,
+        });
         return;
       }
       setPopup({
         type: "success",
         message: payload?.data
-          ? `Saved: ${payload.data.fs}, ${payload.data.goods}, ${payload.data.amount}`
+          ? `Saved: ${payload.data.fs}, ${payload.data.goods}, ${payload.data.amount}, ${Number(payload.data.price).toFixed(2)}`
           : "Saved!",
+        key: ++popupKeyRef.current,
       });
       const fsValue = formData.fs;
       form.reset();
       const fsField = form.elements.namedItem("fs");
       if (fsField instanceof HTMLInputElement) fsField.value = fsValue;
     } catch {
-      setPopup({ type: "error", message: "Network error while saving data." });
+      setPopup({
+        type: "error",
+        message: "Network error while saving data.",
+        key: ++popupKeyRef.current,
+      });
+    } finally {
+      savingRef.current = false;
     }
   };
 
@@ -287,6 +303,7 @@ export default function Home() {
         {/* Popup */}
         {popup ? (
           <div
+            key={popup.key}
             className={`fixed left-1/2 top-5 z-50 w-[min(92vw,28rem)] -translate-x-1/2 animate-rise-in rounded-2xl border p-3 shadow-[0_12px_40px_rgba(5,8,20,0.5)] backdrop-blur ${
               isDark
                 ? "border-[#1f2937] bg-[#101522]/95"

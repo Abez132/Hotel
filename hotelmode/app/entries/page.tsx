@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 
 type Entry = {
@@ -27,8 +27,12 @@ function groupByDate(entries: Entry[]): DateGroup[] {
     list.push(e);
     map.set(e.date, list);
   }
+  const parseDMY = (d: string) => {
+    const [day, month, year] = d.split("/").map(Number);
+    return new Date(year, month - 1, day).getTime();
+  };
   return Array.from(map.entries())
-    .sort(([a], [b]) => a.localeCompare(b))
+    .sort(([a], [b]) => parseDMY(a) - parseDMY(b))
     .map(([date, list]) => {
       const sorted = [...list].sort((a, b) =>
         a.fs.localeCompare(b.fs, undefined, {
@@ -435,7 +439,7 @@ export default function EntriesPage() {
                   </tr>
                 ) : (
                   groups.map((group) => (
-                    <>
+                    <Fragment key={group.date}>
                       {/* Regular entry rows */}
                       {group.entries.map((entry) => (
                         <tr
@@ -612,7 +616,7 @@ export default function EntriesPage() {
                         </td>
                         <td className="px-3 py-2.5" />
                       </tr>
-                    </>
+                    </Fragment>
                   ))
                 )}
               </tbody>

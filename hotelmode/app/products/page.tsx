@@ -95,7 +95,7 @@ export default function ProductsPage() {
     );
   };
 
-  const addProduct = () => setProducts((c) => [...c, createEmptyProduct()]);
+  const addProduct = () => setProducts((c) => [createEmptyProduct(), ...c]);
   const removeProduct = (index: number) =>
     setProducts((c) => c.filter((_, i) => i !== index));
 
