@@ -47,4 +47,4 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["sh", "-c", "./node_modules/.bin/prisma migrate deploy && node server.js"]
+CMD ["sh", "-c", "until ./node_modules/.bin/prisma migrate deploy; do echo 'DB not ready, retrying in 3s...'; sleep 3; done && node server.js"]
